@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -26,11 +27,20 @@ public class Contrat {
 
     private boolean valide;
 
-    @OneToOne(mappedBy = "contrat")
+    // Association Contrat - Reservation : OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_reservation", unique = true)
     @ToString.Exclude
     private Reservation reservation;
 
-    @OneToMany(mappedBy = "contrat")
+    // Association Contrat - Paiement : OneToMany
+    @Builder.Default
+    @OneToMany(
+            mappedBy = "contrat",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
     @ToString.Exclude
-    private List<Paiement> paiements;
+    private List<Paiement> paiements = new ArrayList<>();
 }

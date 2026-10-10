@@ -1,3 +1,4 @@
+
 package tn.esprit.adouanileila4cce11.domain;
 
 import jakarta.persistence.*;
@@ -23,7 +24,8 @@ public class Employe {
     @Enumerated(EnumType.STRING)
     private RoleEmploye role;
 
-    @ManyToOne
+    // Plusieurs employés peuvent appartenir à une agence
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_agence")
     @ToString.Exclude
     private Agence agence;

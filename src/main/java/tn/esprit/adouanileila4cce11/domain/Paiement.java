@@ -26,7 +26,8 @@ public class Paiement {
     @Enumerated(EnumType.STRING)
     private ModePaiement modePaiement;
 
-    @ManyToOne
+    // Plusieurs paiements appartiennent à un contrat
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_contrat")
     @ToString.Exclude
     private Contrat contrat;

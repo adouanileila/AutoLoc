@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -31,7 +32,13 @@ public class Client {
 
     private LocalDate dateInscription;
 
-    @OneToMany(mappedBy = "client")
+    // Un client peut avoir plusieurs réservations
+    @Builder.Default
+    @OneToMany(
+            mappedBy = "client",
+            cascade = CascadeType.PERSIST,
+            fetch = FetchType.LAZY
+    )
     @ToString.Exclude
-    private List<Reservation> reservations;
+    private List<Reservation> reservations = new ArrayList<>();
 }

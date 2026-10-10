@@ -24,7 +24,8 @@ public class Maintenance {
 
     private String description;
 
-    @ManyToOne
+    // Plusieurs maintenances peuvent concerner un véhicule
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_vehicule")
     @ToString.Exclude
     private Vehicule vehicule;

@@ -25,18 +25,24 @@ public class Reservation {
     @Enumerated(EnumType.STRING)
     private StatutReservation statut;
 
-    @ManyToOne
+    // Plusieurs réservations peuvent appartenir au même client
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_client")
     @ToString.Exclude
     private Client client;
 
-    @ManyToOne
+    // Plusieurs réservations peuvent concerner le même véhicule
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_vehicule")
     @ToString.Exclude
     private Vehicule vehicule;
 
-    @OneToOne
-    @JoinColumn(name = "id_contrat")
+    // Une réservation peut être associée à un seul contrat
+    @OneToOne(
+            mappedBy = "reservation",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL
+    )
     @ToString.Exclude
     private Contrat contrat;
 }

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -34,25 +36,39 @@ public class Vehicule {
     @Enumerated(EnumType.STRING)
     private StatutVehicule statut;
 
-    @ManyToOne
+    // Plusieurs véhicules peuvent appartenir à une même agence
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_agence")
     @ToString.Exclude
     private Agence agence;
 
-    @OneToMany(mappedBy = "vehicule")
+    // Un véhicule peut avoir plusieurs maintenances
+    @Builder.Default
+    @OneToMany(
+            mappedBy = "vehicule",
+            cascade = CascadeType.PERSIST,
+            fetch = FetchType.LAZY
+    )
     @ToString.Exclude
-    private List<Maintenance> maintenances;
+    private List<Maintenance> maintenances = new ArrayList<>();
 
-    @ManyToMany
+    // Association ManyToMany avec Equipement
+    @Builder.Default
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "vehicule_equipement",
             joinColumns = @JoinColumn(name = "id_vehicule"),
             inverseJoinColumns = @JoinColumn(name = "id_equipement")
     )
     @ToString.Exclude
-    private Set<Equipement> equipements;
+    private Set<Equipement> equipements = new HashSet<>();
 
-    @OneToMany(mappedBy = "vehicule")
+    // Un véhicule peut être lié à plusieurs réservations
+    @Builder.Default
+    @OneToMany(
+            mappedBy = "vehicule",
+            fetch = FetchType.LAZY
+    )
     @ToString.Exclude
-    private List<Reservation> reservations;
+    private List<Reservation> reservations = new ArrayList<>();
 }
