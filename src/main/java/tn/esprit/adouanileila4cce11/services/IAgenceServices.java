@@ -8,7 +8,7 @@ public interface IAgenceServices {
 
     Agence create(Agence agence);
 
-    Agence update(Agence agence);
+    Agence update(Long id ,Agence agence);
 
     Agence findById(Long id);
 

@@ -26,16 +26,22 @@ public class VehiculeServicesImpl implements IVehiculeServices {
         }
         return vehiculeRepository.save(vehicule);
     }
-
     @Override
-    public Vehicule update(Vehicule vehicule) {
+    public Vehicule update(Long id, Vehicule vehicule) {
         validateVehicule(vehicule);
-        if (vehicule.getIdVehicule() == null) {
+
+        if (id == null) {
             throw new IllegalArgumentException(
-                    "L'identifiant du véhicule est obligatoire pour la modification."
+                    "L'identifiant du véhicule est obligatoire."
             );
         }
-        findById(vehicule.getIdVehicule());
+
+        // Vérifier que le véhicule existe
+        Vehicule existingVehicule = findById(id);
+
+        // Mettre à jour les informations du véhicule existant
+        vehicule.setIdVehicule(existingVehicule.getIdVehicule());
+
         return vehiculeRepository.save(vehicule);
     }
 

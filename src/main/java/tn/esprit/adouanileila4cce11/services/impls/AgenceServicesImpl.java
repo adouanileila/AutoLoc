@@ -1,3 +1,4 @@
+
 package tn.esprit.adouanileila4cce11.services.impls;
 
 import lombok.RequiredArgsConstructor;
@@ -22,14 +23,26 @@ public class AgenceServicesImpl implements IAgenceServices {
     }
 
     @Override
-    public Agence update(Agence agence) {
+    public Agence update(Long id, Agence agence) {
+        if (id == null) {
+            throw new IllegalArgumentException("L'identifiant est obligatoire.");
+        }
+
         validate(agence);
-        findById(agence.getIdAgence());
+
+        Agence agenceExistante = findById(id);
+
+        agence.setIdAgence(agenceExistante.getIdAgence());
+
         return agenceRepository.save(agence);
     }
 
     @Override
     public Agence findById(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("L'identifiant est obligatoire.");
+        }
+
         return agenceRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Agence introuvable : " + id));
@@ -49,9 +62,11 @@ public class AgenceServicesImpl implements IAgenceServices {
         if (agence == null) {
             throw new IllegalArgumentException("L'agence est obligatoire.");
         }
+
         if (agence.getVille() == null || agence.getVille().isBlank()) {
             throw new IllegalArgumentException("La ville est obligatoire.");
         }
+
         if (agence.getAdresse() == null || agence.getAdresse().isBlank()) {
             throw new IllegalArgumentException("L'adresse est obligatoire.");
         }
